@@ -1,0 +1,329 @@
+import { configureStore } from '@reduxjs/toolkit';
+import orderSlice, { initialState as mockState } from './orderSlice';
+import { getOrders, getOrderByNumber, orderBurger } from '@thunks';
+import { RequestStatus } from '@utils-types';
+
+describe('orderSlice test', () => {
+  describe('Операция заказа бургера', () => {
+    const mockNewOrderResponse = {
+      success: true,
+      name: 'Space краторный бессмертный минеральный экзо-плантаго spicy люминесцентный бургер',
+      order: {
+        ingredients: [
+          {
+            _id: '643d69a5c3f7b9001cfa093c',
+            name: 'Краторная булка N-200i',
+            type: 'bun',
+            proteins: 80,
+            fat: 24,
+            carbohydrates: 53,
+            calories: 420,
+            price: 1255,
+            image: 'https://code.s3.yandex.net/react/code/bun-02.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/bun-02-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa093e',
+            name: 'Филе Люминесцентного тетраодонтимформа',
+            type: 'main',
+            proteins: 44,
+            fat: 26,
+            carbohydrates: 85,
+            calories: 643,
+            price: 988,
+            image: 'https://code.s3.yandex.net/react/code/meat-03.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/meat-03-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/meat-03-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa093f',
+            name: 'Мясо бессмертных моллюсков Protostomia',
+            type: 'main',
+            proteins: 433,
+            fat: 244,
+            carbohydrates: 33,
+            calories: 420,
+            price: 1337,
+            image: 'https://code.s3.yandex.net/react/code/meat-02.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/meat-02-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/meat-02-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa0946',
+            name: 'Хрустящие минеральные кольца',
+            type: 'main',
+            proteins: 808,
+            fat: 689,
+            carbohydrates: 609,
+            calories: 986,
+            price: 300,
+            image: 'https://code.s3.yandex.net/react/code/mineral_rings.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/mineral_rings-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/mineral_rings-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa0949',
+            name: 'Мини-салат Экзо-Плантаго',
+            type: 'main',
+            proteins: 1,
+            fat: 2,
+            carbohydrates: 3,
+            calories: 6,
+            price: 4400,
+            image: 'https://code.s3.yandex.net/react/code/salad.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/salad-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/salad-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa0943',
+            name: 'Соус фирменный Space Sauce',
+            type: 'sauce',
+            proteins: 50,
+            fat: 22,
+            carbohydrates: 11,
+            calories: 14,
+            price: 80,
+            image: 'https://code.s3.yandex.net/react/code/sauce-04.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/sauce-04-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/sauce-04-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa0942',
+            name: 'Соус Spicy-X',
+            type: 'sauce',
+            proteins: 30,
+            fat: 20,
+            carbohydrates: 40,
+            calories: 30,
+            price: 90,
+            image: 'https://code.s3.yandex.net/react/code/sauce-02.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/sauce-02-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/sauce-02-large.png',
+            __v: 0
+          },
+          {
+            _id: '643d69a5c3f7b9001cfa093c',
+            name: 'Краторная булка N-200i',
+            type: 'bun',
+            proteins: 80,
+            fat: 24,
+            carbohydrates: 53,
+            calories: 420,
+            price: 1255,
+            image: 'https://code.s3.yandex.net/react/code/bun-02.png',
+            image_mobile:
+              'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
+            image_large:
+              'https://code.s3.yandex.net/react/code/bun-02-large.png',
+            __v: 0
+          }
+        ],
+        _id: '68248179c2f30c001cb2394e',
+        owner: {
+          name: 'Злата',
+          email: 'zzhilinko@yandex.ru',
+          createdAt: '2025-05-13T22:06:28.199Z',
+          updatedAt: '2025-05-13T22:08:25.585Z'
+        },
+        status: 'done',
+        name: 'Space краторный бессмертный минеральный экзо-плантаго spicy люминесцентный бургер',
+        createdAt: '2025-05-14T11:41:45.915Z',
+        updatedAt: '2025-05-14T11:41:46.640Z',
+        number: 77131,
+        price: 9705
+      }
+    };
+
+    beforeEach(() => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockNewOrderResponse)
+        })
+      ) as jest.Mock;
+    });
+
+    it('Процедура оформления заказа', async () => {
+      const mockStore = configureStore({
+        reducer: { order: orderSlice.reducer }
+      });
+      await mockStore.dispatch(orderBurger([]));
+
+      const newState = mockStore.getState().order;
+
+      expect(newState.orderStatus).toBe(false);
+      expect(newState.userOrder).toEqual(mockNewOrderResponse.order);
+    });
+
+    it('False: rejected', () => {
+      const action = { type: orderBurger.rejected.type };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.orderStatus).toBe(false);
+    });
+
+    it('True: pending', () => {
+      const action = { type: orderBurger.pending.type };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.orderStatus).toBe(true);
+    });
+
+    it('False: fulfilled', () => {
+      const action = {
+        type: orderBurger.fulfilled.type,
+        payload: mockNewOrderResponse
+      };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.orderStatus).toBe(false);
+      expect(newState.userOrder).toEqual(mockNewOrderResponse.order);
+    });
+  });
+
+  describe('Получение заказов через api', () => {
+    const mockGetOrdersResponse = {
+      success: true,
+      orders: [
+        {
+          createdAt: '2025-05-14T14:40:06.018Z',
+          ingredients: [
+            '643d69a5c3f7b9001cfa093c',
+            '643d69a5c3f7b9001cfa093e',
+            '643d69a5c3f7b9001cfa093c'
+          ],
+          name: 'Краторный люминесцентный бургер',
+          number: 77153,
+          status: 'done',
+          updatedAt: '2025-05-14T14:40:06.730Z',
+          _id: '6824ab46c2f30c001cb239f5'
+        },
+        {
+          createdAt: '2025-05-14T10:16:48.145Z',
+          ingredients: [
+            '643d69a5c3f7b9001cfa093c',
+            '643d69a5c3f7b9001cfa0942',
+            '643d69a5c3f7b9001cfa093c'
+          ],
+          name: 'Краторный spicy бургер',
+          number: 77107,
+          status: 'done',
+          updatedAt: '2025-05-14T10:16:48.775Z',
+          _id: '68246d90c2f30c001cb238fe'
+        }
+      ],
+      total: 76779,
+      totalToday: 139
+    };
+
+    it('Loading: pending', () => {
+      const action = { type: getOrders.pending.type };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.getOrderStatus).toBe(RequestStatus.Loading);
+    });
+
+    it('Failed: rejected', () => {
+      const action = { type: getOrders.rejected.type };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.getOrderStatus).toBe(RequestStatus.Failed);
+    });
+
+    it('Succeeded: fulfilled', () => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockGetOrdersResponse)
+        })
+      ) as jest.Mock;
+
+      const action = {
+        type: getOrders.fulfilled.type,
+        payload: mockGetOrdersResponse
+      };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.getOrderStatus).toBe(RequestStatus.Succeeded);
+      expect(newState.orders).toEqual(mockGetOrdersResponse.orders);
+      expect(newState.total).toBe(76779);
+      expect(newState.totalToday).toBe(139);
+    });
+  });
+
+  describe('Получение заказа по номеру через api', () => {
+    const mockGetOrderByNumberResponse = {
+      success: true,
+      orders: [
+        {
+          createdAt: '2025-05-14T10:16:48.145Z',
+          ingredients: [
+            '643d69a5c3f7b9001cfa093c',
+            '643d69a5c3f7b9001cfa0942',
+            '643d69a5c3f7b9001cfa093c'
+          ],
+          name: 'Краторный spicy бургер',
+          number: 77107,
+          status: 'done',
+          updatedAt: '2025-05-14T10:16:48.775Z',
+          _id: '68246d90c2f30c001cb238fe'
+        }
+      ]
+    };
+
+    it('Loading: pending', () => {
+      const action = { type: getOrderByNumber.pending.type };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.getOrderByNumberStatus).toBe(RequestStatus.Loading);
+    });
+
+    it('Failed: rejected', () => {
+      const action = { type: getOrderByNumber.rejected.type };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.getOrderByNumberStatus).toBe(RequestStatus.Failed);
+    });
+
+    it('Succeeded: fulfilled', () => {
+      global.fetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockGetOrderByNumberResponse)
+        })
+      ) as jest.Mock;
+
+      const action = {
+        type: getOrderByNumber.fulfilled.type,
+        payload: mockGetOrderByNumberResponse
+      };
+      const newState = orderSlice.reducer(mockState, action);
+
+      expect(newState.getOrderByNumberStatus).toBe(RequestStatus.Succeeded);
+      expect(newState.orderByNumber).toEqual(
+        mockGetOrderByNumberResponse.orders
+      );
+    });
+  });
+});
