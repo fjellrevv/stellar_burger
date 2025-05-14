@@ -33,7 +33,6 @@ export const LoginUI: FC<LoginUIProps> = ({
               value={email}
               name='email'
               error={false}
-              errorText=''
               size='default'
             />
           </div>
