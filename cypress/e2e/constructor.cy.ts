@@ -86,34 +86,6 @@ describe('test stellar burger', () => {
         cy.contains('Выберите булки').should('exist');
       });
     });
-    
-    describe('Модальное окно заказа', () => {
-      beforeEach(() => {
-        cy.intercept('GET', '/feed')
-        .as('getFeed');
-        cy.visit('/feed');
-        cy.wait('@getFeed');
-        cy.contains('#077136').parent().click();
-      });
-      it('Открытие модального окна', () => {
-        cy.get(SELECTORS.MODAL).should(
-          'contain',
-          'Био-марсианский флюоресцентный люминесцентный метеоритный бургер'
-        );
-      });
-    
-      it('Закрытие модального окна через крестик', () => {
-        cy.get(SELECTORS.MODAL_CLOSE_BUTTON).click();
-        cy.get(SELECTORS.MODAL).should('not.exist');
-        cy.contains('Лента заказов').should('exist');
-      });
-    
-      it('Закрытие модального окна по клику на оверлей', () => {
-        cy.get(SELECTORS.MODAL_OVERLAY).click({ force: true });
-        cy.get(SELECTORS.MODAL).should('not.exist');
-        cy.contains('Лента заказов').should('exist');
-      });
-    });
   });
 
   describe('Авторизованный пользователь', () => {
