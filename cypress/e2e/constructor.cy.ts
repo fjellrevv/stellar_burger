@@ -34,14 +34,16 @@ describe('test stellar burger', () => {
         cy.addIngredient(ingredients.meat_2);
         cy.addIngredient(ingredients.salad);
         cy.addIngredient(ingredients.rings);
+
+        cy.contains('Оформить заказ').as('orderButton');
       });
 
       it('Перенос на страницу авторизации при оформлении заказа', () => {
-        cy.contains('Оформить заказ').click();
+        cy.get('@orderButton').click();
       });
       
       it('Удаление ингредиентов (включая булку)', () => {
-        cy.contains('Оформить заказ')
+        cy.get('@orderButton')
           .parents('section')
           .first()
           .within(() => {
@@ -65,25 +67,27 @@ describe('test stellar burger', () => {
         cy.visit('');
         cy.wait('@getIngredients');
         cy.contains('Соус с шипами Антарианского плоскоходца').parent().click();
+
+        cy.contains('Выберите булки').as('chooseBun');
       });
       it('Открытие модального окна', () => {
         cy.get(SELECTORS.MODAL).should(
           'contain',
           'Соус с шипами Антарианского плоскоходца'
         );
-        cy.contains('Выберите булки').should('exist');
+        cy.get('@chooseBun').should('exist');
       });
     
       it('Закрытие модального окна через крестик', () => {
         cy.get(SELECTORS.MODAL_CLOSE_BUTTON).click();
         cy.get(SELECTORS.MODAL).should('not.exist');
-        cy.contains('Выберите булки').should('exist');
+        cy.get('@chooseBun').should('exist');
       });
    
       it('Закрытие модального окна по клику на оверлей', () => {
         cy.get(SELECTORS.MODAL_OVERLAY).click({ force: true });
         cy.get(SELECTORS.MODAL).should('not.exist');
-        cy.contains('Выберите булки').should('exist');
+        cy.get('@chooseBun').should('exist');
       });
     });
   });
@@ -104,6 +108,10 @@ describe('test stellar burger', () => {
 
       cy.visit('');
       cy.wait(['@getUser', '@getIngredients']);
+
+      cy.contains('Оформить заказ').as('orderButton');
+      cy.contains('Выберите булки').as('chooseBun');
+
     });
 
     afterEach(() => {
@@ -122,14 +130,14 @@ describe('test stellar burger', () => {
         cy.addIngredient(item);
       });
 
-      cy.contains('Оформить заказ').click();
+      cy.get('@orderButton').click();
 
       cy.wait('@postOrder').then(() => {
         cy.get(SELECTORS.MODAL).should('contain', '77131');
         cy.get(SELECTORS.MODAL_CLOSE_BUTTON).click();
 
-        cy.contains('Выберите булки').should('exist');
-        cy.contains('Оформить заказ').parent().contains('0').should('exist');
+        cy.get('@chooseBun').should('exist');
+        cy.get('@orderButton').parent().contains('0').should('exist');
       });
     });
   });

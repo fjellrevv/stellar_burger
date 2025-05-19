@@ -2,10 +2,18 @@ import constructorSlice, { constructorActions } from './constructorSlice';
 import { TConstructorIngredient } from '@utils-types';
 import mockData from './mockData';
 
-const bun = mockData.find((item) => item.name.includes('Флюоресцентная булка R2-D3'))!;
-const meat_1 = mockData.find((item) => item.name.includes('Мясо бессмертных моллюсков Protostomia'))!;
-const meat_2 = mockData.find((item) => item.name.includes('Говяжий метеорит (отбивная)'))!;
-const sauce = mockData.find((item) => item.name.includes('Соус фирменный Space Sauce'))!;
+const bun = mockData.find((item) =>
+  item.name.includes('Флюоресцентная булка R2-D3')
+)!;
+const meat_1 = mockData.find((item) =>
+  item.name.includes('Мясо бессмертных моллюсков Protostomia')
+)!;
+const meat_2 = mockData.find((item) =>
+  item.name.includes('Говяжий метеорит (отбивная)')
+)!;
+const sauce = mockData.find((item) =>
+  item.name.includes('Соус фирменный Space Sauce')
+)!;
 
 describe('constructorSlice', () => {
   it('Инициализация состояния', () => {
